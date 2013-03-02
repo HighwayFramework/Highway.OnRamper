@@ -11,34 +11,41 @@ namespace OnRamper
     {
         static void Main(string[] args)
         {
-            bool show_help = false;
-            string source = null;
-            string destination = null;
-            string config = null;
+            var config = new Config();
 
             var p = new OptionSet() {
                 { "s|source=", "the {SOURCE} directory of the templated project.",
-                   v => source = v },
+                   v => config.SourceDirectory = v },
                 { "d|destination=", 
                    "the {DESTINATION} directory of the outputted NuGet directories",
-                    v => destination = v },
+                    v => config.DestinationDirectory = v },
                 { "c|config=",  "the {CONFIG} directory.", 
-                   v => config = v },
+                   v => config.ConfigDirectory = v },
                 { "h|help",  "show this message and exit", 
-                   v => show_help = v != null },
+                   v => config.ShowHelp =( v != null )},
             };
 
             List<string> extra;
             try
             {
                 extra = p.Parse(args);
-                Console.WriteLine(source);
-                Console.WriteLine(destination);
-                Console.WriteLine(config);
-                foreach (string item in extra)
+                
+                if (extra.Count != 0)
                 {
-                    Console.WriteLine(item);
+                    Console.WriteLine("Unknown arguments : " + string.Join(",",extra.ToArray()));
+                    return;
                 }
+
+                if (config.ShowHelp)
+                {
+                    Console.WriteLine("I should show help");
+                    return;
+                }
+
+                if (config.IsValid() == false) return;
+
+                var factory = new PackageFactory();
+                factory.Build(config);
             }
             catch (OptionException e)
             {
