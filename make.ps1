@@ -24,4 +24,8 @@
 }
 
 Exists-Item .\Output { Remove-Item -Recurse -Force $_ } -Always { mkdir $_ }
-.\OnRamper\OnRamper\bin\debug\Onramper.exe --source=.\Template --destination=.\Output --config=.\Config --execute=.\Onramper\.nuget\nuget.exe
+.\OnRamper\OnRamper\bin\debug\Onramper.exe `
+    --source=.\Template `
+    --destination=.\Output `
+    --config=.\Config `
+    --execute=.\Onramper\.nuget\nuget.exe
