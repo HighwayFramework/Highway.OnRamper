@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Testing.Example.Goes.Here</id>
+    <version>1.0.0</version>
+    <authors>Tim Rayburn and Devlin Liles</authors>
+    <owners>TRayburn</owners>
+    <licenseUrl>https://github.com/HighwayFramework/Highway.Onramp.MVC/blob/master/README.markdown</licenseUrl>
+    <projectUrl>http://github.com/HighwayFramework/Highway.Onramp.MVC</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Quickstart package for Highway Framework in an MVC project.</description>
+    <copyright>Copyright 2013 Timothy J. Rayburn</copyright>
+    <tags>Highway MVC architecture</tags>
+    <dependencies>
+      <dependency id="WebActivator" />
+      <dependency id="Castle.Windsor" />
+    </dependencies>
+  </metadata>
+</package>
