@@ -14,7 +14,7 @@ namespace OnRamper
         public PackageConfig(Config config, string packageName)
         {
             PackageName = packageName;
-            config = config;
+            this.config = config;
             PackageDirectory = Path.Combine(config.DestinationDirectory, packageName);
             ContentDirectory = Path.Combine(PackageDirectory, "content");
             LibDirectory = Path.Combine(PackageDirectory, "lib");
