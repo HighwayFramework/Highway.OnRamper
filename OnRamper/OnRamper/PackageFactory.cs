@@ -84,7 +84,7 @@ namespace OnRamper
                 using (var rdr = new StreamReader(item))
                 {
                     var content = rdr.ReadToEnd();
-                    content = content.Replace("Templates.", "$rootnamespace$.");
+                    content = content.Replace("Templates", "$rootnamespace$");
                     using (var wrt = new StreamWriter(destFile))
                     {
                         wrt.Write(content);
