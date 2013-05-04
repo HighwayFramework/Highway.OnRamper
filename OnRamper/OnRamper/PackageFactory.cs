@@ -34,7 +34,7 @@ namespace OnRamper
                 AnnounceFiles(pconfig, selectedContent);
 
                 // Move files from source to destination content
-                MoveContentInPlace(selectedContent, pconfig.ContentDirectory, config.SourceDirectory);
+                MoveContentInPlace(selectedContent, pconfig, config);
 
                 // Optionally execute NuGet.exe
                 if (config.ShouldExecute)
@@ -69,31 +69,49 @@ namespace OnRamper
         }
 
 
-        private void MoveContentInPlace(List<string> selectedContent, string contentDirectory, string sourceDirectory)
+        private void MoveContentInPlace(List<string> selectedContent, PackageConfig pconfig, Config config)
         {
+            var xmlExtensions = new List<string> { "xml", "config" };
             foreach (string item in selectedContent)
             {
-                var pathFragment = item.Replace(sourceDirectory, "").TrimStart('/', '\\');
-                var destFile = Path.Combine(contentDirectory, pathFragment);
+                var pathFragment = item.Replace(config.SourceDirectory, "").TrimStart('/', '\\');
+                var destFile = Path.Combine(pconfig.ContentDirectory, pathFragment);
                 string destDirectory = Path.GetDirectoryName(destFile);
-                destFile += ".pp";
 
                 if (Directory.Exists(destDirectory) == false)
                     Directory.CreateDirectory(destDirectory);
 
                 using (var rdr = new StreamReader(item))
                 {
-                    var content = rdr.ReadToEnd();
-                    content = content.Replace("Templates", "$rootnamespace$");
-                    using (var wrt = new StreamWriter(destFile))
-                    {
-                        wrt.Write(content);
-                        wrt.Flush();
-                    }
+                    string itemExtension = Path.GetExtension(item);
+                    if (xmlExtensions.Contains(itemExtension))
+                        WriteXmlTransform(destFile, rdr, pconfig, config);
+                    else
+                        WritePartialFile(destFile, rdr);
                 }
             }
         }
 
+        private void WriteXmlTransform(string destFile, StreamReader rdr, PackageConfig pconfig, Config config)
+        {
+            destFile += ".transform";
+            var content = rdr.ReadToEnd();
+            var cExaminer = new ConfigExaminer();
+            var xDoc = cExaminer.Populate(pconfig.PackageName, content);
+            xDoc.Save(destFile);
+        }
+
+        private static void WritePartialFile(string destFile, StreamReader rdr)
+        {
+            destFile += ".pp";
+            var content = rdr.ReadToEnd();
+            content = content.Replace("Templates", "$rootnamespace$");
+            using (var wrt = new StreamWriter(destFile))
+            {
+                wrt.Write(content);
+                wrt.Flush();
+            }
+        }
 
         private void FilterForFiles(string directory, List<string> selectedContent, string packageName)
         {
