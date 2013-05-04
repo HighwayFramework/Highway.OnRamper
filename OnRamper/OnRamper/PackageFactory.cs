@@ -111,33 +111,5 @@ namespace OnRamper
                 }
             }
         }
-        public class PackageConfig
-        {
-            public PackageConfig(Config config, string packageName)
-            {
-                PackageName = packageName;
-                PackageDirectory = Path.Combine(config.DestinationDirectory, packageName);
-                ContentDirectory = Path.Combine(PackageDirectory, "content");
-                LibDirectory = Path.Combine(PackageDirectory, "lib");
-                ToolsDirectory = Path.Combine(PackageDirectory, "tools");
-            }
-            public string PackageName { get; set; }
-            public string ContentDirectory { get; set; }
-            public string LibDirectory { get; set; }
-            public string ToolsDirectory { get; set; }
-            public string PackageDirectory { get; set; }
-
-            public void Ensure()
-            {
-                if (Directory.Exists(PackageDirectory) == false)
-                    Directory.CreateDirectory(PackageDirectory);
-                if (Directory.Exists(ContentDirectory) == false)
-                    Directory.CreateDirectory(ContentDirectory);
-                if (Directory.Exists(ToolsDirectory) == false)
-                    Directory.CreateDirectory(ToolsDirectory);
-                if (Directory.Exists(LibDirectory) == false)
-                    Directory.CreateDirectory(LibDirectory);
-            }
-        }
     }
 }
