@@ -67,6 +67,8 @@ namespace OnRamper
             Console.WriteLine();
             Console.WriteLine();
         }
+
+
         private void MoveContentInPlace(List<string> selectedContent, string contentDirectory, string sourceDirectory)
         {
             foreach (string item in selectedContent)
@@ -74,6 +76,7 @@ namespace OnRamper
                 var pathFragment = item.Replace(sourceDirectory, "").TrimStart('/', '\\');
                 var destFile = Path.Combine(contentDirectory, pathFragment);
                 string destDirectory = Path.GetDirectoryName(destFile);
+                destFile += ".pp";
 
                 if (Directory.Exists(destDirectory) == false)
                     Directory.CreateDirectory(destDirectory);
