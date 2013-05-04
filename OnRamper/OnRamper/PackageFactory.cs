@@ -71,7 +71,7 @@ namespace OnRamper
 
         private void MoveContentInPlace(List<string> selectedContent, PackageConfig pconfig, Config config)
         {
-            var xmlExtensions = new List<string> { "xml", "config" };
+            var xmlExtensions = new List<string> { ".xml", ".config" };
             foreach (string item in selectedContent)
             {
                 var pathFragment = item.Replace(config.SourceDirectory, "").TrimStart('/', '\\');
@@ -84,7 +84,7 @@ namespace OnRamper
                 using (var rdr = new StreamReader(item))
                 {
                     string itemExtension = Path.GetExtension(item);
-                    if (xmlExtensions.Contains(itemExtension))
+                    if (xmlExtensions.Contains(itemExtension.ToLower()))
                         WriteXmlTransform(destFile, rdr, pconfig, config);
                     else
                         WritePartialFile(destFile, rdr);
