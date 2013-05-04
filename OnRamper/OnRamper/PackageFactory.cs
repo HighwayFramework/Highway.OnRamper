@@ -11,8 +11,11 @@ namespace OnRamper
 {
     public class PackageFactory
     {
+        private List<string> xmlExtensions;
+
         public void Build(Config config)
         {
+            xmlExtensions = new List<string> { ".xml", ".config" };
             var configFiles = Directory.GetFiles(config.ConfigDirectory, "*.nuspec");
             foreach (var file in configFiles)
             {
@@ -71,7 +74,6 @@ namespace OnRamper
 
         private void MoveContentInPlace(List<string> selectedContent, PackageConfig pconfig, Config config)
         {
-            var xmlExtensions = new List<string> { ".xml", ".config" };
             foreach (string item in selectedContent)
             {
                 var pathFragment = item.Replace(config.SourceDirectory, "").TrimStart('/', '\\');
@@ -125,7 +127,8 @@ namespace OnRamper
                 using (var rdr = new StreamReader(file))
                 {
                     var firstLine = rdr.ReadLine();
-                    if (firstLine != null && firstLine.Contains(String.Format("[[{0}]]", packageName)))
+                    if ((firstLine != null && firstLine.Contains(String.Format("[[{0}]]", packageName))) ||
+                        xmlExtensions.Contains(Path.GetExtension(file)))
                     {
                         selectedContent.Add(file);
                     }
