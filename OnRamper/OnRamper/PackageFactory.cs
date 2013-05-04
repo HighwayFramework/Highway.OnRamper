@@ -127,13 +127,19 @@ namespace OnRamper
                 using (var rdr = new StreamReader(file))
                 {
                     var firstLine = rdr.ReadLine();
-                    if ((firstLine != null && firstLine.Contains(String.Format("[[{0}]]", packageName))) ||
-                        xmlExtensions.Contains(Path.GetExtension(file)))
+                    var allContent = rdr.ReadToEnd();
+                    if ((firstLine != null && ContainsPackage(firstLine, packageName)) ||
+                        (xmlExtensions.Contains(Path.GetExtension(file)) && ContainsPackage(allContent, packageName)))
                     {
                         selectedContent.Add(file);
                     }
                 }
             }
+        }
+
+        private bool ContainsPackage(string content, string packageName)
+        {
+            return content.Contains(String.Format("[[{0}]]", packageName));
         }
     }
 }
